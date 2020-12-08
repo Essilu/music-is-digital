@@ -13,14 +13,11 @@ def get_notes_from_line(line):
 
     for char in line:
         if not last_char_is_upper and char.isupper():
-            last_char_is_upper = True
             raw_notes_list.append(current_note)
-            current_note = char
-        else:
-            if char.isupper():
-                last_char_is_upper = True
-            else:
-                last_char_is_upper = False
-            current_note += char
+            current_note = ""
 
+        current_note += char
+        last_char_is_upper = char.isupper()
+
+    raw_notes_list.append(current_note)
     return raw_notes_list
