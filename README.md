@@ -6,8 +6,8 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 
 ## To Do
 
-- [ ] Decode file
-- [ ] Play music from file
+- [x] Decode file
+- [x] Play music from file
 - [ ] Generate new musics
 - [ ] Play new musics
 - [ ] GUI ?
