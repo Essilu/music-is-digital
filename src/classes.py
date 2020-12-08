@@ -48,6 +48,21 @@ class Note:
 
         return output
 
+    @staticmethod
+    def inverse_notes(note_list):
+        """ Inverse notes with (total - note_number) % total """
+        output = []
+        for note in note_list:
+            if note.name != "Z":
+                note_name_index = NOTE_NAMES.index(note.name)
+                inversed_index = ((len(NOTE_NAMES) - note_name_index) % len(NOTE_NAMES))
+                new_note_name = NOTE_NAMES[inversed_index]
+                new_note = f'{new_note_name}{note.figure}'
+                output.append(Note(new_note))
+            else:
+                output.append(note)
+        return output
+
     def parse(self):
         """ Parse notes in the partitions, and returns a tuple containing the name, the duration and if it contains a point """
         groups = re.findall("([A-Z]*)(r|b|n|c)(p)?", self.raw_input)
