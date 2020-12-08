@@ -15,7 +15,7 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [x] Generate a note
   - [ ] Save the new partition as a file
 - [ ] Transposition
-  - [ ] Generate a transposition
+  - [X] Generate a transposition
   - [ ] Save the new partition in a file
 - [ ] Inversion
   - [ ] Generate an inversion
