@@ -1,7 +1,14 @@
 import re
 from time import sleep
+import random
+
 import numpy as np
 import simpleaudio as sa
+
+
+# List of notes and figures
+NOTE_NAMES = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
+NOTE_FIGURES = ['r', 'b', 'n', 'c']
 
 
 class Note:
@@ -11,6 +18,12 @@ class Note:
 
         self.frequency = self.get_frequency()
         self.duration = self.get_duration()
+
+    @staticmethod
+    def create_note():
+        raw_note = random.choice(NOTE_NAMES)
+        raw_note += random.choice(NOTE_FIGURES)
+        return Note(raw_note)
 
     def parse(self):
         groups = re.findall("([A-Z]*)(r|b|n|c)(p)?", self.raw_input)
