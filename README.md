@@ -15,15 +15,27 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [x] Generate a note
   - [ ] Save the new partition as a file
 - [ ] Transposition
-  - [X] Generate a transposition
+  - [x] Generate a transposition
   - [ ] Save the new partition in a file
 - [ ] Inversion
-  - [ ] Generate an inversion
+  - [x] Generate an inversion
   - [ ] Save the new partition in a file
-- [ ] Markov
-  - [ ] To be precised (2 versions, taking the number into account...)
-  - [ ] Generate a markov chain
+- [ ] Markov V1
+  - [x] Create matrix
+  - [x] Generate new partitions
+  - [ ] Find a way to add figures to the new partition
   - [ ] Save the new partition in a file
+- [ ] Markov V2
+  - [x] Create matrix
+  - [ ] Generate new partitions
+  - [ ] Analyze the whole database
+  - [ ] Save the new partition in a file
+
+- [ ] Main
+  - [ ] add test for every function so that we can test them
+
 - [ ] GUI
-  - [ ] Selecteur de musique
+  - [ ] Music selector
+  - [ ] (open file)
   - [ ] Show musics (turtle, pigame, tkinter)
+C
