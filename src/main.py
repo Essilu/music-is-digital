@@ -45,36 +45,42 @@ class Note:
             duration = 250
         elif self.parsed_data[1] == 'c':
             duration = 125
+        # If there is a point, set it to half the duration, otherwise 0
         point_duration = duration / 2 if has_point else 0
+        # Add the duration and the extended duration (point), and normalize it
         return (duration + point_duration) / 1000
 
     def play(self):
-        # Get timesteps for each sample, "duration" is note duration in seconds
-        sample_rate = 44100
-        t = np.linspace(0, self.duration, int(self.duration * sample_rate), False)
-        # Generate sine wave tone
-        tone = np.sin(self.frequency * t * 6 * np.pi)
-        # Normalize to 24−bit range
-        tone *= 8388607 / np.max(np.abs(tone))
-        # Convert to 32−bit data
-        tone = tone.astype(np.int32)
+        """ If there is a frequency, play the note, otherwise it is a pause """
+        if self.frequency != 0:
+            # Get timesteps for each sample, "duration" is note duration in seconds
+            sample_rate = 44100
+            t = np.linspace(0, self.duration, int(self.duration * sample_rate), False)
+            # Generate sine wave tone
+            tone = np.sin(self.frequency * t * 6 * np.pi)
+            # Normalize to 24−bit range
+            tone *= 8388607 / np.max(np.abs(tone))
+            # Convert to 32−bit data
+            tone = tone.astype(np.int32)
 
-        # Convert from 32−bit to 24−bit by building a new byte buffer ,
-        # Skipping every fourth bit
-        # Note: this also works for 2−channel audio
-        i = 0
-        byte_array = [ ]
-        for b in tone.tobytes():
-            if i % 4 != 3:
-                byte_array.append(b)
-            i += 1
+            # Convert from 32−bit to 24−bit by building a new byte buffer ,
+            # Skipping every fourth bit
+            # Note: this also works for 2−channel audio
+            i = 0
+            byte_array = [ ]
+            for b in tone.tobytes():
+                if i % 4 != 3:
+                    byte_array.append(b)
+                i += 1
 
-        audio = bytearray(byte_array)
-        # Start playback
-        play_obj = sa.play_buffer(audio, 1, 3, sample_rate)
-        # Wait for playback to finish before exiting
-        play_obj.wait_done()
-
+            audio = bytearray(byte_array)
+            # Start playback
+            play_obj = sa.play_buffer(audio, 1, 3, sample_rate)
+            # Wait for playback to finish before exiting
+            play_obj.wait_done()
+        else:
+            # Sleep for the duration of the note when the note is "Z"
+            sleep(self.duration)
 
 
 file = open("./assets/partitions.txt", "r")
@@ -103,7 +109,7 @@ def get_notes_from_line(line):
 
 
 # Get the first line, remove the last 2 characters (\n), and remove spaces
-curr_line = lines[1][:-1].replace(' ', '')
+curr_line = lines[3][:-1].replace(' ', '')
 raw_notes = get_notes_from_line(curr_line)
 for raw_note in raw_notes:
     note = Note(raw_note)
