@@ -28,41 +28,6 @@ class Note:
         raw_note += random.choice(NOTE_FIGURES)
         return Note(raw_note)
 
-    @staticmethod
-    def transpose_notes(note_list, amount):
-        """ Transpose the note from one to another with x amount"""
-        output = []
-        for note in note_list:
-            # We transpose every notes except for Z
-            if note.name != "Z":
-                # Get the index of the note to transpose
-                note_name_index = NOTE_NAMES.index(note.name)
-                # Get the transposed index according to  the amount
-                transposed_index = (note_name_index + amount) % len(NOTE_NAMES)
-                new_note_name = NOTE_NAMES[transposed_index]
-                # Create the new note, with the new note's name, and its original figure
-                new_note = f'{new_note_name}{note.figure}'
-                output.append(Note(new_note))
-            else:
-                output.append(note)
-
-        return output
-
-    @staticmethod
-    def inverse_notes(note_list):
-        """ Inverse notes with (total - note_number) % total """
-        output = []
-        for note in note_list:
-            if note.name != "Z":
-                note_name_index = NOTE_NAMES.index(note.name)
-                inversed_index = ((len(NOTE_NAMES) - note_name_index) % len(NOTE_NAMES))
-                new_note_name = NOTE_NAMES[inversed_index]
-                new_note = f'{new_note_name}{note.figure}'
-                output.append(Note(new_note))
-            else:
-                output.append(note)
-        return output
-
     def parse(self):
         """ Parse notes in the partitions, and returns a tuple containing the name, the duration and if it contains a point """
         groups = re.findall("([A-Z]*)(r|b|n|c)(p)?", self.raw_input)
