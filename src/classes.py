@@ -1,6 +1,6 @@
+import random
 import re
 from time import sleep
-import random
 
 import numpy as np
 import simpleaudio as sa
@@ -12,24 +12,29 @@ NOTE_FIGURES = ['r', 'b', 'n', 'c']
 
 
 class Note:
-    def __init__(self, raw_input) -> None:
+    def __init__(self, raw_input):
         self.raw_input = raw_input
+
         self.parsed_data = self.parse()
 
         self.name = self.parsed_data[0]
         self.figure = self.parsed_data[1]
         self.frequency = self.get_frequency()
         self.duration = self.get_duration()
+        self.is_pause = self.name == "Z"
 
     @staticmethod
-    def create_note():
-        """ Create a random note """
+    def create_random_note():
+        """ Create a random note. """
         raw_note = random.choice(NOTE_NAMES)
         raw_note += random.choice(NOTE_FIGURES)
         return Note(raw_note)
 
     def parse(self):
-        """ Parse notes in the partitions, and returns a tuple containing the name, the duration and if it contains a point """
+        """
+        Parse notes in the partitions, and returns a tuple containing the name,
+        the duration and whether it contains a point.
+        """
         groups = re.findall("([A-Z]*)(r|b|n|c)(p)?", self.raw_input)
         return groups[0]
 
@@ -49,20 +54,19 @@ class Note:
             return 440
         elif self.parsed_data[0] == "SI":
             return 495
-        else:
-            return 0
+        return 0
 
     def get_duration(self):
         """ Get the duration depending on the figure, and if there is a point """
         has_point = bool(self.parsed_data[2])
         duration = 0
-        if self.parsed_data[1] == 'r':
+        if self.parsed_data[1] == 'r':  # "Ronde"
             duration = 1000
-        elif self.parsed_data[1] == 'b':
+        elif self.parsed_data[1] == 'b':  # "Blanche"
             duration = 500
-        elif self.parsed_data[1] == 'n':
+        elif self.parsed_data[1] == 'n':  # "Noire"
             duration = 250
-        elif self.parsed_data[1] == 'c':
+        elif self.parsed_data[1] == 'c':  # "Croche"
             duration = 125
         # If there is a point, set it to half the duration, otherwise 0
         point_duration = duration / 2 if has_point else 0
@@ -71,7 +75,10 @@ class Note:
 
     def play(self):
         """ If there is a frequency, play the note, otherwise it is a pause """
-        if self.frequency != 0:
+        if self.is_pause:
+            # Sleep for the duration of the note when the note is "Z"
+            sleep(self.duration)
+        else:
             # Get timesteps for each sample, "duration" is note duration in seconds
             sample_rate = 44100
             t = np.linspace(0, self.duration, int(self.duration * sample_rate), False)
@@ -86,7 +93,7 @@ class Note:
             # Skipping every fourth bit
             # Note: this also works for 2−channel audio
             i = 0
-            byte_array = [ ]
+            byte_array = []
             for b in tone.tobytes():
                 if i % 4 != 3:
                     byte_array.append(b)
@@ -97,6 +104,3 @@ class Note:
             play_obj = sa.play_buffer(audio, 1, 3, sample_rate)
             # Wait for playback to finish before exiting
             play_obj.wait_done()
-        else:
-            # Sleep for the duration of the note when the note is "Z"
-            sleep(self.duration)

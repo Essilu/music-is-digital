@@ -32,7 +32,7 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [ ] Save the new partition in a file
 
 - [ ] Main
-  - [ ] add test for every function so that we can test them
+  - [ ] Add test for every function so that we can test them
 
 - [ ] GUI
   - [ ] Music selector
