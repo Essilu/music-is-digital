@@ -1,5 +1,4 @@
 import json
-from src.functions import markov_v1
 import classes
 from functions import *
 
@@ -15,7 +14,7 @@ music_index = int(input("Enter a music to play (1, 3, 5, 7...)"))
 # test_type has to be one of "normal", "markovv1", "transpose", "inverse", "markovv2"
 test_type = "markovv2-db"
 
-if test_type == "normal" or test_type == "markovv1" or test_type == "markovv2":
+if test_type == "normal" or test_type == "markovv1" or test_type == "markovv2" or test_type == "markovv2-db":
     # Get the first line, remove the last 2 characters (\n), and remove spaces
     line = lines[music_index][:-1].replace(' ', '')
     raw_notes = get_notes_from_line(line)
