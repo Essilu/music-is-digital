@@ -5,7 +5,6 @@ from classes import Note
 NOTE_NAMES = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
 NOTE_FIGURES = ['r', 'b', 'n', 'c']
 
-
 def get_notes_from_line(line):
     """
     Takes a line as a string, and gives back an array of note symbols (string, with name + figure).
@@ -67,31 +66,74 @@ def inverse_notes(note_list):
     return output
 
 
-def markov_v1(note_list, total):
-    """ Get back a list of notes, chosen with the markov process (without taking occurrences into account) """
-
-    # Step 1: Generate the statistics
+def get_probability_matrix(note_list):
     # We get the array of note's names, and filter out the Zs
     note_names = [note.name for note in note_list if not note.is_pause]
     # Create an empty matrix filled with each note (as rows and columns)
     notes_matrix = {name: {name: 0 for name in NOTE_NAMES} for name in NOTE_NAMES}
 
     # Build the matrix with the given list
-    for i, note_name in enumerate(note_names):
-        # FIXME: Don't ignore the last note
-        if i + 1 == len(note_names):
-            continue
-        successor = note_names[i + 1]
-        notes_matrix[note_name][successor] += 1
+    for i in range(len(note_names)):
+        index = (i + 1) % len(note_names)
+        successor = note_names[index]
+        notes_matrix[note_names[i]][successor] += 1
+    return notes_matrix
+
+
+def markov_v1(note_list, total):
+    """ Get back a list of notes, chosen with the markov process (without taking occurrences into account) """
+
+    # Step 1: Generate the statistics
+    notes_matrix = get_probability_matrix(note_list)
 
     # Step 2: Choose a random starting note
     current_note = random.choice(NOTE_NAMES)
 
     # Step 3: Choose notes among successor
     output = []
-    for i in range(total):
+    for _ in range(total):
         non_zero_notes = [note for (note, amount) in notes_matrix[current_note].items() if amount > 0]
         note = random.choice(non_zero_notes)
+        output.append(note)
+        current_note = note
+
+    return output
+
+def merge_2_dictionnaries(dict1, dict2):
+    """ Merge two dictionnaries together by adding the values """
+    result = dict1
+    for k, v in dict2.items():
+        result[k] = (result.get(k) or 0) + v
+    return result
+
+
+def merge_n_dictionnaries(dicts):
+    """ Merge n dictionnaries together by adding the values """
+    result = dicts[0]
+    for i in range(1, len(dicts)):
+        result = merge_2_dictionnaries(result, dicts[i])
+    return result
+
+
+def markov_v2(note_list, total):
+    """ Get back a list of notes, chosen with the markov process (taking occurrences into account) """
+
+    # Step 1: Generate the statistics
+    notes_matrix = get_probability_matrix(note_list)
+
+    # Step 2: Choose a starting note which is the most common one
+    cumulative_notes_occurences = merge_n_dictionnaries(list(notes_matrix.values()))
+    current_note = max(cumulative_notes_occurences)
+
+    # Step 3: Choose notes among successor
+    output = [current_note]
+    for _ in range(total):
+        # Use the choices function with the weight (weights are stored in the keys of the matrix)
+        population = list(notes_matrix[current_note].keys())
+        weights = list(notes_matrix[current_note].values())
+
+        note = random.choices(population, weights)[0]
+
         output.append(note)
         current_note = note
 
