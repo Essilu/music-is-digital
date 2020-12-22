@@ -99,6 +99,7 @@ def markov_v1(note_list, total):
 
     return output
 
+
 def merge_2_dictionnaries(dict1, dict2):
     """ Merge two dictionnaries together by adding the values """
     result = dict1
@@ -115,11 +116,34 @@ def merge_n_dictionnaries(dicts):
     return result
 
 
-def markov_v2(note_list, total):
+def analyze_db():
+    """ Runs a statistical analysis of the """
+    file = open("./assets/partitions.txt", "r")
+    lines = file.readlines()
+    file.close()
+
+    result_matrix = {name: {name: 0 for name in NOTE_NAMES} for name in NOTE_NAMES}
+
+    for i in range(1, 24, 2):
+        line = lines[i][:-1].replace(' ', '')
+        print(line)
+        notes = get_notes_from_line(line)
+        notes = [Note(note) for note in notes]
+        current_matrix = get_probability_matrix(notes)
+        for note in NOTE_NAMES:
+            result_matrix[note] = merge_2_dictionnaries(current_matrix[note], result_matrix[note])
+
+    return result_matrix
+
+
+def markov_v2(note_list, total, run_from_db=False):
     """ Get back a list of notes, chosen with the markov process (taking occurrences into account) """
 
     # Step 1: Generate the statistics
-    notes_matrix = get_probability_matrix(note_list)
+    if run_from_db:
+        notes_matrix = analyze_db()
+    else:
+        notes_matrix = get_probability_matrix(note_list)
 
     # Step 2: Choose a starting note which is the most common one
     cumulative_notes_occurences = merge_n_dictionnaries(list(notes_matrix.values()))

@@ -28,7 +28,7 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 - [ ] Markov V2
   - [x] Create matrix
   - [x] Generate new partitions
-  - [ ] Analyze the whole database
+  - [x] Analyze the whole database
   - [ ] Save the new partition in a file
 
 - [ ] Main
