@@ -27,7 +27,7 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [ ] Save the new partition in a file
 - [ ] Markov V2
   - [x] Create matrix
-  - [ ] Generate new partitions
+  - [x] Generate new partitions
   - [ ] Analyze the whole database
   - [ ] Save the new partition in a file
 
@@ -35,7 +35,9 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [ ] Add test for every function so that we can test them
 
 - [ ] GUI
+  - [ ] Show musics (turtle, pigame, tkinter)
+
+- [ ] Extra Bonus
   - [ ] Music selector
   - [ ] (open file)
-  - [ ] Show musics (turtle, pigame, tkinter)
-C
+  - [ ] Add unit tests to our functions
