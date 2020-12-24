@@ -1,3 +1,4 @@
+import turtle as tr
 import copy
 import random
 from classes import Note
@@ -81,7 +82,7 @@ def music_player(raw_array_to_play, method):
 
     skip_lines(30)
 
-    print("Here is your transposed partition:")
+    print(f"Here is your {method} partition:")
     print(as_string)
     skip_lines(1)
 
@@ -90,8 +91,20 @@ def music_player(raw_array_to_play, method):
         if option == "PLAY" or option == "1":
             skip_lines(30)
             print("Playing...")
+            tr.bgcolor("black")
+            colors=["red", "purple", "blue", "green", "orange", "yellow"]
+            d = 0
+            x = 0
             for note in parsed_array_to_play:
                 note.play()
+                d += 1
+                tr.up()
+                tr.color(colors[x % 6])
+                tr.width(x / 100 + 2)
+                tr.down()
+                tr.forward(x * 3)
+                tr.left(59)
+                x = (x + 1) % 360
             print("End of the song")
             skip_lines(1)
 
