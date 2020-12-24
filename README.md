@@ -35,8 +35,8 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [x] Music selector
   - [x] Add test for every function so that we can test them
 
-- [ ] GUI
-  - [ ] Show musics (turtle, pygame, tkinter)
+- [x] GUI
+  - [x] Show musics (turtle, pygame, tkinter)
 
 - [ ] Extra Bonus
   - [ ] Add a music player when playing a music

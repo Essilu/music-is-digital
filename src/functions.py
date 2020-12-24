@@ -91,20 +91,25 @@ def music_player(raw_array_to_play, method):
         if option == "PLAY" or option == "1":
             skip_lines(30)
             print("Playing...")
+
             tr.bgcolor("black")
-            colors=["red", "purple", "blue", "green", "orange", "yellow"]
-            d = 0
-            x = 0
+            x = 10
+            colors = ["red", "purple", "blue", "green", "orange", "yellow"]
+
             for note in parsed_array_to_play:
+                if not note.is_pause:
+                    tr.speed('fastest')
+                    # The note type change the color
+                    tr.color(colors[NOTE_NAMES.index(note.name) % 6])
+                    tr.circle(x)
+                    tr.up()
+                    tr.right(90)
+                    # The duration changes the spacing between circles
+                    tr.fd(note.duration * 30)
+                    tr.left(90)
+                    tr.down()
+                    x = x + note.duration * 30
                 note.play()
-                d += 1
-                tr.up()
-                tr.color(colors[x % 6])
-                tr.width(x / 100 + 2)
-                tr.down()
-                tr.forward(x * 3)
-                tr.left(59)
-                x = (x + 1) % 360
             print("End of the song")
             skip_lines(1)
 
