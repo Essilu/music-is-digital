@@ -35,14 +35,24 @@ elif algorithm == "INVERSE" or algorithm == "2":
 
     skip_lines(1)
 
-    option = selector(["Play", "Save"], ["PLAY", "SAVE"])
-
-    if option == "PLAY" or option == "1":
-        for note in inverted:
-            note.play()
-    elif option == "SAVE" or option == "2":
-        song_name = input("Insert the name of the song to save: ")
-        save_to_file(inverted_as_string, song_name)
+    while True:
+        option = selector(["Play", "Save", "Quit"], ["PLAY", "SAVE", "QUIT"])
+        if option == "PLAY" or option == "1":
+            skip_lines(30)
+            print("Playing...")
+            for note in inverted:
+                note.play()
+            print("End of the song")
+            skip_lines(1)
+        elif option == "SAVE" or option == "2":
+            skip_lines(30)
+            song_name = input("Insert the name of the song to save: ")
+            save_to_file(inverted_as_string, song_name)
+            print("Partition saved as", song_name, "in homemade_partitions.txt")
+        elif option == "QUIT" or option == "3":
+            skip_lines(30)
+            print("End of program")
+            break
 
 elif algorithm == "TRANSPOSE" or algorithm == "3":
     parsed_notes = choose_partition()
