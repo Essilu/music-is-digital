@@ -123,13 +123,17 @@ def inverse_notes(note_list):
     """ Inverse notes with (total - note_number) % total """
     parsed_output, raw_output = [], []
     for note in note_list:
+        # We transpose every notes except for Z
         if note.is_pause:
             raw_output.append(f'{note.name}{note.figure}')
             parsed_output.append(note)
         else:
+            # Get the index of the note to transpose
             note_name_index = NOTE_NAMES.index(note.name)
+            # Get the transposed index according to  the amount
             inverted_index = ((len(NOTE_NAMES) - note_name_index) % len(NOTE_NAMES))
             new_note_name = NOTE_NAMES[inverted_index]
+            # Create the new note, with the new note's name, and its original figure
             new_note = f'{new_note_name}{note.figure}'
             new_note += 'p' if note.has_point else ''
             raw_output.append(new_note)
