@@ -2,40 +2,9 @@ import json
 import classes
 from functions import *
 
-#Functions useful in the main program
-def skip_lines(nb):
-    print("\n" * (nb-1))
-
-def selector(possibilities, names):
-    """ Print a selector of all possibilities, and validate the choice against the "names" list """
-    for i in range(len(possibilities)):
-        print(f'({i +1})  {possibilities[i]}')
-        names.append(str(i + 1))
-    print("")
-    choice = str(input("Select a category by using it's index or by spelling it: "))
-    choice = choice.upper()
-    print("")
-    while choice not in names:
-        choice = str(input("Select a category by using it's index or by spelling it: "))
-        choice = choice.upper()
-    return choice
-
-def choose_index(maximum):
-    """ Chooses an integer index in between 1 and maximum, always return a valid index """
-    while True:
-        try:
-            index = int(input("Choose the index of the song you want to play: "))
-            if index <= 0 or index > maximum:
-                raise IndexError
-            break
-        except ValueError:
-            print("Oops! That's not a valid number. Try again...")
-        except IndexError:
-            print(f"Oops! That index doesn't exist. It has to be between 1 and {int(maximum)}. Try again...")
-    return index
-
 
 print("### Welcome to the project 'Music is Digital', made by Elliot Maisl and Ulysse Juget.")
+skip_lines(1)
 print("Please, choose what algorithm to use!")
 
 algorithm = selector([
@@ -48,42 +17,35 @@ algorithm = selector([
 
 skip_lines(30)
 
-# TODO: Make it impossible to choose impossible algos
 if algorithm == "PLAY" or algorithm == "1":
-    file_name = selector(["The original partition given by the instructor", "The homemade partition file"], ["ORIGINAL", "HOMEMADE"])
-
-    if file_name == "1" or file_name == "ORIGINAL":
-        file = open("./assets/partitions.txt", "r")
-    elif file_name == "2" or file_name == "HOMEMADE":
-        file = open("./assets/homemade_partitions.txt", "r")
-
-    lines = file.readlines()
-    file.close()
-    for i in range(0, len(lines), 2):
-        print(lines[i][:-1])
-
-    song_index = choose_index(len(lines) / 2)
-
-    partition = lines[song_index * 2 - 1][:-1].replace(' ', '')
-    raw_notes = get_notes_from_line(partition)
-    raw_notes = [classes.Note(note) for note in raw_notes]
-    for note in raw_notes:
+    parsed_notes = choose_partition()
+    for note in parsed_notes:
         note.play()
 
 elif algorithm == "INVERSE" or algorithm == "2":
-    print("You choosed to play a song with inverted notes.")
-    print("(1)  The original partition given by the instructor")
-    print("(2)  The homemade partition file")
+    parsed_notes = choose_partition()
 
-    file_name = input("Select a category by using it's index or by spelling it: ")
+    inverted, raw_inverted = inverse_notes(parsed_notes)
+    inverted_as_string = ' '.join(raw_inverted)
+
+    skip_lines(30)
+
+    print("Here is your inverted partition:")
+    print(inverted_as_string)
+
+    skip_lines(1)
+
+    option = selector(["Play", "Save"], ["PLAY", "SAVE"])
+
+    if option == "PLAY" or option == "1":
+        for note in inverted:
+            note.play()
+    elif option == "SAVE" or option == "2":
+        song_name = input("Insert the name of the song to save: ")
+        save_to_file(inverted_as_string, song_name)
 
 elif algorithm == "TRANSPOSE" or algorithm == "3":
-    print("You choosed to play a song with transposed notes.")
-
-    print("(1)  The original partition given by the instructor")
-    print("(2)  The homemade partition file")
-
-    file_name = input("Select a category by using it's index or by spelling it: ")
+    parsed_notes = choose_partition()
 
 elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     print("You choosed to generate a song with the Markov's algorithm, but without taking into account the number of occurences.")

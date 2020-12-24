@@ -5,6 +5,73 @@ from classes import Note
 NOTE_NAMES = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
 NOTE_FIGURES = ['r', 'b', 'n', 'c']
 
+
+def skip_lines(nb):
+    print("\n" * (nb-1))
+
+
+def selector(possibilities, names):
+    """ Print a selector of all possibilities, and validate the choice against the "names" list """
+    for i in range(len(possibilities)):
+        print(f'({i +1})  {possibilities[i]}')
+        names.append(str(i + 1))
+    print("")
+    choice = str(input("Select a category by using it's index or by spelling it: "))
+    choice = choice.upper()
+    print("")
+    while choice not in names:
+        choice = str(input("Select a category by using it's index or by spelling it: "))
+        choice = choice.upper()
+    return choice
+
+
+def choose_index(maximum):
+    """ Chooses an integer index in between 1 and maximum, always return a valid index """
+    while True:
+        try:
+            index = int(input("Choose the index of the song you want to play: "))
+            if index <= 0 or index > maximum:
+                raise IndexError
+            break
+        except ValueError:
+            print("Oops! That's not a valid number. Try again...")
+        except IndexError:
+            print(f"Oops! That index doesn't exist. It has to be between 1 and {int(maximum)}. Try again...")
+    return index
+
+
+def choose_partition():
+    file_name = selector(["The original partition given by the instructor", "The homemade partition file"], ["ORIGINAL", "HOMEMADE"])
+
+    if file_name == "1" or file_name == "ORIGINAL":
+        file = open("./assets/partitions.txt", "r")
+    elif file_name == "2" or file_name == "HOMEMADE":
+        file = open("./assets/homemade_partitions.txt", "r")
+
+    lines = file.readlines()
+    file.close()
+    for i in range(0, len(lines), 2):
+        print(lines[i][:-1])
+
+    song_index = choose_index(len(lines) / 2)
+
+    partition = lines[song_index * 2 - 1][:-1].replace(' ', '')
+    raw_notes = get_notes_from_line(partition)
+    parsed_notes = [Note(note) for note in raw_notes]
+    return parsed_notes
+
+
+def save_to_file(content, song_name):
+    file = open("./assets/homemade_partitions.txt", "r")
+    total_lines = len(file.readlines())
+    file.close()
+
+    file = open("./assets/homemade_partitions.txt", "a")
+    file.write(f"#{int(total_lines / 2 + 1)} {song_name}\n")
+    file.write(content + "\n")
+    file.close()
+
+
 def get_notes_from_line(line):
     """
     Takes a line as a string, and gives back an array of note symbols (string, with name + figure).
