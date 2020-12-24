@@ -137,7 +137,7 @@ def get_notes_from_line(line):
 
 def transpose_notes(note_list, amount):
     """ Transpose the note from one to another with an amount x """
-    raw_output = [], []
+    raw_output = []
     for note in note_list:
         # We transpose every notes except for Z
         if note.is_pause:
@@ -157,7 +157,7 @@ def transpose_notes(note_list, amount):
 
 def inverse_notes(note_list):
     """ Inverse notes with (total - note_number) % total """
-    raw_output = [], []
+    raw_output = []
     for note in note_list:
         # We transpose every notes except for Z
         if note.is_pause:
