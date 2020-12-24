@@ -1,11 +1,10 @@
-import json
-import classes
 from functions import *
 
 
 print("### Welcome to the project 'Music is Digital', made by Elliot Maisl and Ulysse Juget.")
 skip_lines(1)
 print("Please, choose what algorithm to use!")
+skip_lines(1)
 
 algorithm = selector([
     "Play (normal)",
@@ -56,6 +55,40 @@ elif algorithm == "INVERSE" or algorithm == "2":
 
 elif algorithm == "TRANSPOSE" or algorithm == "3":
     parsed_notes = choose_partition()
+
+    skip_lines(1)
+
+    print("Choose the amount of the transposition: ")
+    amount = choose_number(7)
+
+    transposed, raw_transposed = transpose_notes(parsed_notes, amount)
+    transposed_as_string = ' '.join(raw_transposed)
+
+    skip_lines(30)
+
+    print("Here is your transposed partition:")
+    print(transposed_as_string)
+
+    skip_lines(1)
+
+    while True:
+        option = selector(["Play", "Save", "Quit"], ["PLAY", "SAVE", "QUIT"])
+        if option == "PLAY" or option == "1":
+            skip_lines(30)
+            print("Playing...")
+            for note in transposed:
+                note.play()
+            print("End of the song")
+            skip_lines(1)
+        elif option == "SAVE" or option == "2":
+            skip_lines(30)
+            song_name = input("Insert the name of the song to save: ")
+            save_to_file(transposed_as_string, song_name)
+            print("Partition saved as", song_name, "in homemade_partitions.txt")
+        elif option == "QUIT" or option == "3":
+            skip_lines(30)
+            print("End of program")
+            break
 
 elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     print("You choosed to generate a song with the Markov's algorithm, but without taking into account the number of occurences.")
