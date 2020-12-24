@@ -31,6 +31,15 @@ class Note:
         raw_note += random.choice(NOTE_FIGURES)
         return Note(raw_note)
 
+    @staticmethod
+    def to_raw(parsed_note):
+        output = []
+        for note in parsed_note:
+            new_note = f'{note.name}{note.figure}'
+            new_note += 'p' if note.has_point else ''
+            output.append(new_note)
+        return output
+
     def parse(self):
         """
         Parse notes in the partitions, and returns a tuple containing the name,

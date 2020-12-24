@@ -1,3 +1,4 @@
+from classes import Note
 from functions import *
 from prettytable import PrettyTable
 
@@ -22,8 +23,8 @@ if algorithm == "PLAY" or algorithm == "1":
     skip_lines(1)
 
     parsed_notes = choose_partition()
-    for note in parsed_notes:
-        note.play()
+    raw_notes = Note.to_raw(parsed_notes)
+    music_player(raw_notes, '')
 
 elif algorithm == "INVERSE" or algorithm == "2":
     print("Choose a file to get the music from and invert it.")
@@ -38,7 +39,6 @@ elif algorithm == "TRANSPOSE" or algorithm == "3":
     skip_lines(1)
 
     parsed_notes = choose_partition()
-
     skip_lines(1)
     print("Choose the amount of the transposition.")
     amount = choose_number(7)
