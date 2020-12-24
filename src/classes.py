@@ -19,6 +19,7 @@ class Note:
 
         self.name = self.parsed_data[0]
         self.figure = self.parsed_data[1]
+        self.has_point = bool(self.parsed_data[2])
         self.frequency = self.get_frequency()
         self.duration = self.get_duration()
         self.is_pause = self.name == "Z"
@@ -58,7 +59,6 @@ class Note:
 
     def get_duration(self):
         """ Get the duration depending on the figure, and if there is a point """
-        has_point = bool(self.parsed_data[2])
         duration = 0
         if self.parsed_data[1] == 'r':  # "Ronde"
             duration = 1000
@@ -69,7 +69,7 @@ class Note:
         elif self.parsed_data[1] == 'c':  # "Croche"
             duration = 125
         # If there is a point, set it to half the duration, otherwise 0
-        point_duration = duration / 2 if has_point else 0
+        point_duration = duration / 2 if self.has_point else 0
         # Add the duration and the extended duration (point), and normalize it
         return (duration + point_duration) / 1000
 
