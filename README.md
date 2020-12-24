@@ -11,7 +11,8 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 
 - [x] Decode file
 - [x] Play music from file
-- [ ] Generate random notes
+- [ ] Comment the code
+- [x] Generate random notes
   - [x] Generate a note
   - [ ] Save the new partition as a file
 - [ ] Transposition
@@ -23,7 +24,6 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 - [ ] Markov V1
   - [x] Create matrix
   - [x] Generate new partitions
-  - [ ] Find a way to add figures to the new partition
   - [ ] Save the new partition in a file
 - [ ] Markov V2
   - [x] Create matrix
@@ -32,12 +32,11 @@ A summary of the instructions are available here : https://gist.github.com/nofta
   - [ ] Save the new partition in a file
 
 - [ ] Main
+  - [ ] Music selector
   - [ ] Add test for every function so that we can test them
 
 - [ ] GUI
-  - [ ] Show musics (turtle, pigame, tkinter)
+  - [ ] Show musics (turtle, pygame, tkinter)
 
 - [ ] Extra Bonus
-  - [ ] Music selector
-  - [ ] (open file)
   - [ ] Add unit tests to our functions
