@@ -14,13 +14,15 @@ def skip_lines(nb):
 
 def selector(possibilities, names):
     """ Print a selector of all possibilities, and validate the choice against the "names" list """
+    # Print all possibilities
     for i in range(len(possibilities)):
         print(f'({i +1})  {possibilities[i]}')
         names.append(str(i + 1))
-    print("")
+    skip_lines(1)
+    # Ask a user for a choice
     choice = str(input("Select a category by using its index or by spelling it: "))
     choice = choice.upper()
-    print("")
+    # Verify that the choice is possible
     while choice not in names:
         choice = str(input("Select a category by using its index or by spelling it: "))
         choice = choice.upper()
@@ -44,8 +46,11 @@ def choose_number(maximum):
 
 
 def choose_partition():
+    """ Let the user choose a partition amongst the original one and those "home made" """
+    # Ask the user wether the partitions should be taken from the original partitions, or from the home-made partitions
     file_name = selector(["The original partition given by the instructor", "The homemade partition file"], ["ORIGINAL", "HOMEMADE"])
 
+    # Open the corresponding file
     if file_name == "1" or file_name == "ORIGINAL":
         file = open("./assets/partitions.txt", "r")
     elif file_name == "2" or file_name == "HOMEMADE":
@@ -53,13 +58,16 @@ def choose_partition():
 
     skip_lines(30)
 
+    # Print all song's names in the partitions
     lines = file.readlines()
     file.close()
     for i in range(0, len(lines), 2):
         print(lines[i][:-1])
 
+    # Ask the user to choose for a song
     song_index = choose_number(len(lines) / 2)
 
+    # Get the corresponding song's partition and convert notes to Note instances
     partition = lines[song_index * 2 - 1][:-1].replace(' ', '')
     raw_notes = get_notes_from_line(partition)
     parsed_notes = [Note(note) for note in raw_notes]
@@ -67,16 +75,23 @@ def choose_partition():
 
 
 def save_to_file(content, song_name):
+    """ Save a partition to a file """
     file = open("./assets/homemade_partitions.txt", "a+")
-    file.seek(0) # Move to the start of the file
-    total_lines = len(file.readlines()) # Read the total lines
-    file.seek(0, 2) # Move to the end of the file
+    # Move to the start of the file
+    file.seek(0)
+    # Read the total lines
+    total_lines = len(file.readlines())
+    # Move to the end of the file
+    file.seek(0, 2)
+    # Write the song's name
     file.write(f"#{int(total_lines / 2 + 1)} {song_name}\n")
+    # Write the song's partition
     file.write(content + "\n")
     file.close()
 
 
 def music_player(raw_array_to_play, method):
+    """ Little menu to play/save/quit when a song has been chosen/created """
     parsed_array_to_play = [Note(note) for note in raw_array_to_play]
     as_string = ' '.join(raw_array_to_play)
 
@@ -86,25 +101,32 @@ def music_player(raw_array_to_play, method):
     print(as_string)
     skip_lines(1)
 
+    # While the user has not quit the program, show the menu
     while True:
+        # Ask the user if they want to Play the song, Save it, or quit the program
         option = selector(["Play", "Save", "Quit"], ["PLAY", "SAVE", "QUIT"])
         if option == "PLAY" or option == "1":
             skip_lines(30)
             print("Playing...")
+
             tr.bgcolor("black")
-            colors=["red", "purple", "blue", "green", "orange", "yellow"]
-            d = 0
-            x = 0
+            x = 10
+            colors = ["red", "purple", "blue", "green", "orange", "yellow"]
+
             for note in parsed_array_to_play:
+                if not note.is_pause:
+                    tr.speed('fastest')
+                    # The note type change the color
+                    tr.color(colors[NOTE_NAMES.index(note.name) % 6])
+                    tr.circle(x)
+                    tr.up()
+                    tr.right(90)
+                    # The duration changes the spacing between circles
+                    tr.fd(note.duration * 30)
+                    tr.left(90)
+                    tr.down()
+                    x = x + note.duration * 30
                 note.play()
-                d += 1
-                tr.up()
-                tr.color(colors[x % 6])
-                tr.width(x / 100 + 2)
-                tr.down()
-                tr.forward(x * 3)
-                tr.left(59)
-                x = (x + 1) % 360
             print("End of the song")
             skip_lines(1)
 
@@ -189,9 +211,10 @@ def inverse_notes(note_list):
     return raw_output
 
 
-def get_probability_matrix(note_list):
+def get_probability_matrix(parsed_note_list):
+    """ Get the probability matrix for a given partition """
     # We get the array of note's names, and filter out the Zs
-    note_names = [note.name for note in note_list if not note.is_pause]
+    note_names = [note.name for note in parsed_note_list if not note.is_pause]
     # Create an empty matrix filled with each note (as rows and columns)
     notes_matrix = {name: {name: 0 for name in NOTE_NAMES} for name in NOTE_NAMES}
 
@@ -250,13 +273,17 @@ def analyze_db():
     lines = file.readlines()
     file.close()
 
+    # Create the matrix filled with 0s
     result_matrix = {name: {name: 0 for name in NOTE_NAMES} for name in NOTE_NAMES}
 
     for i in range(1, 24, 2):
+        # Remove the \n at the end of the line, and remove spaces
         line = lines[i][:-1].replace(' ', '')
         notes = get_notes_from_line(line)
         notes = [Note(note) for note in notes]
+        # Get the probability matrix for the notes
         current_matrix = get_probability_matrix(notes)
+        # Add the current line to the top line, to get the total note frequencies
         for note in NOTE_NAMES:
             result_matrix[note] = merge_2_dictionnaries(current_matrix[note], result_matrix[note])
 
