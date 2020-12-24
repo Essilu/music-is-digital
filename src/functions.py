@@ -25,18 +25,19 @@ def selector(possibilities, names):
     return choice
 
 
-def choose_index(maximum):
-    """ Chooses an integer index in between 1 and maximum, always return a valid index """
+def choose_number(maximum):
+    """ Chooses an integer between 1 and maximum, always return a valid number """
     while True:
         try:
-            index = int(input("Choose the index of the song you want to play: "))
+            skip_lines(1)
+            index = int(input(f"Choose a number between 1 and {int(maximum)}: "))
             if index <= 0 or index > maximum:
                 raise IndexError
             break
         except ValueError:
             print("Oops! That's not a valid number. Try again...")
         except IndexError:
-            print(f"Oops! That index doesn't exist. It has to be between 1 and {int(maximum)}. Try again...")
+            print(f"Oops! That number is not possible. It has to be between 1 and {int(maximum)}. Try again...")
     return index
 
 
