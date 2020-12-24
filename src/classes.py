@@ -17,11 +17,17 @@ class Note:
 
         self.parsed_data = self.parse()
 
+        # Name of the note (one of NOTE_NAMES)
         self.name = self.parsed_data[0]
+        # Figure of the note (one of NOTE_FIGURES)
         self.figure = self.parsed_data[1]
+        # Wether the note has its duration extended with a point
         self.has_point = bool(self.parsed_data[2])
+        # The frequency of the note
         self.frequency = self.get_frequency()
+        # The duration of the note in seconds
         self.duration = self.get_duration()
+        # Wether the note is a pause
         self.is_pause = self.name == "Z"
 
     @staticmethod
@@ -33,6 +39,7 @@ class Note:
 
     @staticmethod
     def to_raw(parsed_note):
+        """ Transform a list of Note instances into a list of raw notes, as in the partition files """
         output = []
         for note in parsed_note:
             new_note = f'{note.name}{note.figure}'

@@ -9,7 +9,6 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 
 ## To Do
 
-- [ ] Comment the code
 - [x] Decode file
 - [x] Play music from file
 - [x] Generate random notes

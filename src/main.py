@@ -58,9 +58,12 @@ elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     skip_lines(30)
     raw_notes, dataset = markov_v1(amount, parsed_notes)
 
+    # Create a table with an external library
     table = PrettyTable()
     notes_names = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
+    # Add headers
     table.field_names = ['X', *notes_names]
+    # Add rows
     for note in notes_names:
         table.add_row([note, *dataset[note].values()])
     print(table)
@@ -86,9 +89,12 @@ elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
         skip_lines(30)
         raw_notes, dataset = markov_v2(amount, parsed_note_list=parsed_notes)
 
+    # Create a table with an external library
     table = PrettyTable()
     notes_names = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
+    # Add headers
     table.field_names = ['X', *notes_names]
+    # Add rows
     for note in notes_names:
         table.add_row([note, *dataset[note].values()])
     print(table)
