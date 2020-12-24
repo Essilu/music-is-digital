@@ -49,12 +49,14 @@ def choose_partition():
     elif file_name == "2" or file_name == "HOMEMADE":
         file = open("./assets/homemade_partitions.txt", "r")
 
+    skip_lines(30)
+
     lines = file.readlines()
     file.close()
-    for i in range(0, len(lines), 2):
-        print(lines[i][:-1])
 
-    song_index = choose_index(len(lines) / 2)
+    # FIXME: The selector says that we can also spell the name of the song, but we really can't.
+    song_names = [lines[i][3:-1] for i in range(0, len(lines), 2)]
+    song_index = int(selector(song_names, []))
 
     partition = lines[song_index * 2 - 1][:-1].replace(' ', '')
     raw_notes = get_notes_from_line(partition)
