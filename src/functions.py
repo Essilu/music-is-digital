@@ -98,11 +98,12 @@ def get_notes_from_line(line):
 
 def transpose_notes(note_list, amount):
     """ Transpose the note from one to another with an amount x """
-    output = []
+    parsed_output, raw_output = [], []
     for note in note_list:
         # We transpose every notes except for Z
         if note.is_pause:
-            output.append(note)
+            raw_output.append(f'{note.name}{note.figure}')
+            parsed_output.append(note)
         else:
             # Get the index of the note to transpose
             note_name_index = NOTE_NAMES.index(note.name)
@@ -111,9 +112,11 @@ def transpose_notes(note_list, amount):
             new_note_name = NOTE_NAMES[transposed_index]
             # Create the new note, with the new note's name, and its original figure
             new_note = f'{new_note_name}{note.figure}'
-            output.append(Note(new_note))
+            new_note += 'p' if note.has_point else ''
+            raw_output.append(new_note)
+            parsed_output.append(Note(new_note))
 
-    return output
+    return parsed_output, raw_output
 
 
 def inverse_notes(note_list):
