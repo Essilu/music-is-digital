@@ -62,11 +62,10 @@ def choose_partition():
 
 
 def save_to_file(content, song_name):
-    file = open("./assets/homemade_partitions.txt", "r")
-    total_lines = len(file.readlines())
-    file.close()
-
-    file = open("./assets/homemade_partitions.txt", "a")
+    file = open("./assets/homemade_partitions.txt", "a+")
+    file.seek(0) # Move to the start of the file
+    total_lines = len(file.readlines()) # Read the total lines
+    file.seek(0, 2) # Move to the end of the file
     file.write(f"#{int(total_lines / 2 + 1)} {song_name}\n")
     file.write(content + "\n")
     file.close()
