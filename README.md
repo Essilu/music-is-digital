@@ -9,35 +9,36 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 
 ## To Do
 
+- [ ] Comment the code
 - [x] Decode file
 - [x] Play music from file
-- [ ] Generate random notes
+- [x] Generate random notes
   - [x] Generate a note
-  - [ ] Save the new partition as a file
-- [ ] Transposition
+  - [x] Save the new partition as a file
+- [x] Transposition
   - [x] Generate a transposition
-  - [ ] Save the new partition in a file
-- [ ] Inversion
+  - [x] Save the new partition in a file
+- [x] Inversion
   - [x] Generate an inversion
-  - [ ] Save the new partition in a file
-- [ ] Markov V1
+  - [x] Save the new partition in a file
+- [x] Markov V1
   - [x] Create matrix
   - [x] Generate new partitions
-  - [ ] Find a way to add figures to the new partition
-  - [ ] Save the new partition in a file
-- [ ] Markov V2
+  - [x] Save the new partition in a file
+- [x] Markov V2
   - [x] Create matrix
   - [x] Generate new partitions
   - [x] Analyze the whole database
-  - [ ] Save the new partition in a file
+  - [x] Save the new partition in a file
 
-- [ ] Main
-  - [ ] Add test for every function so that we can test them
+- [x] Main
+  - [x] Music selector
+  - [x] Add test for every function so that we can test them
 
 - [ ] GUI
-  - [ ] Show musics (turtle, pigame, tkinter)
+  - [ ] Show musics (turtle, pygame, tkinter)
 
 - [ ] Extra Bonus
-  - [ ] Music selector
-  - [ ] (open file)
+  - [ ] Add a music player when playing a music
+  - [ ] In Markov chains, generate figures with patterns, instead of randomly
   - [ ] Add unit tests to our functions

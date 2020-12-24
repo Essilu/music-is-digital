@@ -1,9 +1,127 @@
+import turtle as tr
+import copy
 import random
 from classes import Note
 
 # List of notes and figures
 NOTE_NAMES = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
 NOTE_FIGURES = ['r', 'b', 'n', 'c']
+
+
+def skip_lines(nb):
+    print("\n" * (nb-1))
+
+
+def selector(possibilities, names):
+    """ Print a selector of all possibilities, and validate the choice against the "names" list """
+    for i in range(len(possibilities)):
+        print(f'({i +1})  {possibilities[i]}')
+        names.append(str(i + 1))
+    print("")
+    choice = str(input("Select a category by using its index or by spelling it: "))
+    choice = choice.upper()
+    print("")
+    while choice not in names:
+        choice = str(input("Select a category by using its index or by spelling it: "))
+        choice = choice.upper()
+    return choice
+
+
+def choose_number(maximum):
+    """ Chooses an integer between 1 and maximum, always return a valid number """
+    while True:
+        try:
+            skip_lines(1)
+            index = int(input(f"Choose a number between 1 and {int(maximum)}: "))
+            if index <= 0 or index > maximum:
+                raise IndexError
+            break
+        except ValueError:
+            print("Oops! That's not a valid number. Try again...")
+        except IndexError:
+            print(f"Oops! That number is not possible. It has to be between 1 and {int(maximum)}. Try again...")
+    return index
+
+
+def choose_partition():
+    file_name = selector(["The original partition given by the instructor", "The homemade partition file"], ["ORIGINAL", "HOMEMADE"])
+
+    if file_name == "1" or file_name == "ORIGINAL":
+        file = open("./assets/partitions.txt", "r")
+    elif file_name == "2" or file_name == "HOMEMADE":
+        file = open("./assets/homemade_partitions.txt", "r")
+
+    skip_lines(30)
+
+    lines = file.readlines()
+    file.close()
+    for i in range(0, len(lines), 2):
+        print(lines[i][:-1])
+
+    song_index = choose_number(len(lines) / 2)
+
+    partition = lines[song_index * 2 - 1][:-1].replace(' ', '')
+    raw_notes = get_notes_from_line(partition)
+    parsed_notes = [Note(note) for note in raw_notes]
+    return parsed_notes
+
+
+def save_to_file(content, song_name):
+    file = open("./assets/homemade_partitions.txt", "a+")
+    file.seek(0) # Move to the start of the file
+    total_lines = len(file.readlines()) # Read the total lines
+    file.seek(0, 2) # Move to the end of the file
+    file.write(f"#{int(total_lines / 2 + 1)} {song_name}\n")
+    file.write(content + "\n")
+    file.close()
+
+
+def music_player(raw_array_to_play, method):
+    parsed_array_to_play = [Note(note) for note in raw_array_to_play]
+    as_string = ' '.join(raw_array_to_play)
+
+    skip_lines(30)
+
+    print(f"Here is your {method} partition:")
+    print(as_string)
+    skip_lines(1)
+
+    while True:
+        option = selector(["Play", "Save", "Quit"], ["PLAY", "SAVE", "QUIT"])
+        if option == "PLAY" or option == "1":
+            skip_lines(30)
+            print("Playing...")
+            tr.bgcolor("black")
+            colors=["red", "purple", "blue", "green", "orange", "yellow"]
+            d = 0
+            x = 0
+            for note in parsed_array_to_play:
+                note.play()
+                d += 1
+                tr.up()
+                tr.color(colors[x % 6])
+                tr.width(x / 100 + 2)
+                tr.down()
+                tr.forward(x * 3)
+                tr.left(59)
+                x = (x + 1) % 360
+            print("End of the song")
+            skip_lines(1)
+
+        elif option == "SAVE" or option == "2":
+            skip_lines(30)
+            print(f"Here is your {method} partition:")
+            print(as_string)
+            skip_lines(1)
+            song_name = input("Insert the name of the song to save: ")
+            save_to_file(as_string, song_name)
+            print("Partition saved as", song_name, "in homemade_partitions.txt")
+
+        elif option == "QUIT" or option == "3":
+            skip_lines(30)
+            print("End of program")
+            break
+
 
 def get_notes_from_line(line):
     """
@@ -32,11 +150,11 @@ def get_notes_from_line(line):
 
 def transpose_notes(note_list, amount):
     """ Transpose the note from one to another with an amount x """
-    output = []
+    raw_output = []
     for note in note_list:
         # We transpose every notes except for Z
         if note.is_pause:
-            output.append(note)
+            raw_output.append(f'{note.name}{note.figure}')
         else:
             # Get the index of the note to transpose
             note_name_index = NOTE_NAMES.index(note.name)
@@ -45,25 +163,30 @@ def transpose_notes(note_list, amount):
             new_note_name = NOTE_NAMES[transposed_index]
             # Create the new note, with the new note's name, and its original figure
             new_note = f'{new_note_name}{note.figure}'
-            output.append(Note(new_note))
-
-    return output
+            new_note += 'p' if note.has_point else ''
+            raw_output.append(new_note)
+    return raw_output
 
 
 def inverse_notes(note_list):
     """ Inverse notes with (total - note_number) % total """
-    output = []
+    raw_output = []
     for note in note_list:
+        # We transpose every notes except for Z
         if note.is_pause:
-            output.append(note)
+            raw_output.append(f'{note.name}{note.figure}')
         else:
+            # Get the index of the note to transpose
             note_name_index = NOTE_NAMES.index(note.name)
+            # Get the transposed index according to  the amount
             inverted_index = ((len(NOTE_NAMES) - note_name_index) % len(NOTE_NAMES))
             new_note_name = NOTE_NAMES[inverted_index]
+            # Create the new note, with the new note's name, and its original figure
             new_note = f'{new_note_name}{note.figure}'
-            output.append(Note(new_note))
+            new_note += 'p' if note.has_point else ''
+            raw_output.append(new_note)
 
-    return output
+    return raw_output
 
 
 def get_probability_matrix(note_list):
@@ -80,24 +203,29 @@ def get_probability_matrix(note_list):
     return notes_matrix
 
 
-def markov_v1(note_list, total):
+def add_figure(note):
+    return f'{note}{random.choice(NOTE_FIGURES)}'
+
+
+def markov_v1(total, note_list):
     """ Get back a list of notes, chosen with the markov process (without taking occurrences into account) """
 
     # Step 1: Generate the statistics
-    notes_matrix = get_probability_matrix(note_list)
+    dataset = get_probability_matrix(note_list)
+    notes_matrix = copy.deepcopy(dataset)
 
     # Step 2: Choose a random starting note
     current_note = random.choice(NOTE_NAMES)
 
     # Step 3: Choose notes among successor
-    output = []
+    output = [add_figure(current_note)]
     for _ in range(total):
         non_zero_notes = [note for (note, amount) in notes_matrix[current_note].items() if amount > 0]
         note = random.choice(non_zero_notes)
-        output.append(note)
+        output.append(add_figure(note))
         current_note = note
 
-    return output
+    return output, dataset
 
 
 def merge_2_dictionnaries(dict1, dict2):
@@ -126,7 +254,6 @@ def analyze_db():
 
     for i in range(1, 24, 2):
         line = lines[i][:-1].replace(' ', '')
-        print(line)
         notes = get_notes_from_line(line)
         notes = [Note(note) for note in notes]
         current_matrix = get_probability_matrix(notes)
@@ -136,21 +263,19 @@ def analyze_db():
     return result_matrix
 
 
-def markov_v2(note_list, total, run_from_db=False):
+def markov_v2(total, parsed_note_list=None, run_from_database=False):
     """ Get back a list of notes, chosen with the markov process (taking occurrences into account) """
 
     # Step 1: Generate the statistics
-    if run_from_db:
-        notes_matrix = analyze_db()
-    else:
-        notes_matrix = get_probability_matrix(note_list)
+    dataset = analyze_db() if run_from_database else get_probability_matrix(parsed_note_list)
+    notes_matrix = copy.deepcopy(dataset)
 
     # Step 2: Choose a starting note which is the most common one
     cumulative_notes_occurences = merge_n_dictionnaries(list(notes_matrix.values()))
     current_note = max(cumulative_notes_occurences)
 
     # Step 3: Choose notes among successor
-    output = [current_note]
+    output = [add_figure(current_note)]
     for _ in range(total):
         # Use the choices function with the weight (weights are stored in the keys of the matrix)
         population = list(notes_matrix[current_note].keys())
@@ -158,7 +283,7 @@ def markov_v2(note_list, total, run_from_db=False):
 
         note = random.choices(population, weights)[0]
 
-        output.append(note)
+        output.append(add_figure(note))
         current_note = note
 
-    return output
+    return output, dataset

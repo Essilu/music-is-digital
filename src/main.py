@@ -1,42 +1,97 @@
-import json
-import classes
+from classes import Note
 from functions import *
-
-file = open("./assets/partitions.txt", "r")
-lines = file.readlines()
-file.close()
+from prettytable import PrettyTable
 
 
-music_index = int(input("Enter a music to play (1, 3, 5, 7...)"))
+print("Welcome to the project 'Music is Digital', made by Elliot Maisl and Ulysse Juget.")
+skip_lines(1)
+print("Please, choose what algorithm to use.")
+skip_lines(1)
 
-# Extremely temporary, to be replaced by a proper selector thingy.
-# It just allows us to keep our test code, and try different functions easily.
-# test_type has to be one of "normal", "markovv1", "transpose", "inverse", "markovv2"
-test_type = "markovv2-db"
+algorithm = selector([
+    "Play (normal)",
+    "Inverse",
+    "Transpose",
+    "Markov chains 1 (Without taking into account the number of occurrences of notes)",
+    "Markov chains 2 (Taking into account the number of occurrences of notes)"
+], ["PLAY", "INVERSE", "TRANSPOSE", "MARKOV CHAINS 1", "MARKOV CHAINS 2"])
 
-if test_type == "normal" or test_type == "markovv1" or test_type == "markovv2" or test_type == "markovv2-db":
-    # Get the first line, remove the last 2 characters (\n), and remove spaces
-    line = lines[music_index][:-1].replace(' ', '')
-    raw_notes = get_notes_from_line(line)
-    raw_notes = [classes.Note(note) for note in raw_notes]
+skip_lines(30)
 
-    if test_type == "normal":
-        for note in raw_notes:
-            note.play()
-    elif test_type == "markovv1":
-        print(markov_v1(raw_notes, 10))
-    elif test_type == "markovv2":
-        print(markov_v2(raw_notes, 20))
-    elif test_type == "markovv2-db":
-        print(markov_v2(raw_notes, 20, True))
+if algorithm == "PLAY" or algorithm == "1":
+    print("Choose a file to play the music from.")
+    skip_lines(1)
 
-        result_matrix = analyze_db()
-        with open('./assets/db_analysis.json', 'w') as fp:
-            json.dump(result_matrix, fp, indent=4)
+    parsed_notes = choose_partition()
+    raw_notes = Note.to_raw(parsed_notes)
+    music_player(raw_notes, '')
 
-elif test_type == "transpose" or test_type == "inverse":
-    notes = [Note.create_random_note() for i in range(15)]
-    if test_type == "transpose":
-        print(transpose_notes(notes, 10))
-    elif test_type == "inverse":
-        print(inverse_notes(notes, 10))
+elif algorithm == "INVERSE" or algorithm == "2":
+    print("Choose a file to get the music from and invert it.")
+    skip_lines(1)
+
+    parsed_notes = choose_partition()
+    raw_inverted = inverse_notes(parsed_notes)
+    music_player(raw_inverted, "inverted")
+
+elif algorithm == "TRANSPOSE" or algorithm == "3":
+    print("Choose a file to get the music from and transpose it.")
+    skip_lines(1)
+
+    parsed_notes = choose_partition()
+    skip_lines(1)
+    print("Choose the amount of the transposition.")
+    amount = choose_number(7)
+
+    raw_transposed = transpose_notes(parsed_notes, amount)
+    music_player(raw_transposed, "transposed")
+
+elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
+    print("You choosed to generate a song with the Markov's algorithm, but without taking into account the number of occurences.")
+    skip_lines(1)
+    print("Choose the amount of notes to generate.")
+
+    amount = choose_number(100)
+    skip_lines(1)
+
+    parsed_notes = choose_partition()
+    skip_lines(30)
+    raw_notes, dataset = markov_v1(amount, parsed_notes)
+
+    table = PrettyTable()
+    notes_names = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
+    table.field_names = ['X', *notes_names]
+    for note in notes_names:
+        table.add_row([note, *dataset[note].values()])
+    print(table)
+    skip_lines(1)
+
+    music_player(raw_notes, "Markov Chains 1")
+
+elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
+    print("You choosed to generate a song with the Markov's algorithm, by into account the number of occurences.")
+    print("Choose from where to generate all the data.")
+    skip_lines(1)
+    source = selector(["Whole partition database", "A specific partition"], ["DATABASE", "PARTITION", "SPECIFIC"])
+
+    skip_lines(30)
+
+    print("Choose the amount of notes to generate.")
+    amount = choose_number(100)
+    if source in ["DATABASE", "1"]:
+        raw_notes, dataset = markov_v2(amount, run_from_database=True)
+
+    elif source in ["PARTITION", "SPECIFIC", "2"]:
+        parsed_notes = choose_partition()
+        skip_lines(30)
+        raw_notes, dataset = markov_v2(amount, parsed_note_list=parsed_notes)
+
+    table = PrettyTable()
+    notes_names = ['DO', 'RE', 'MI', 'FA', 'SOL', 'LA', 'SI']
+    table.field_names = ['X', *notes_names]
+    for note in notes_names:
+        table.add_row([note, *dataset[note].values()])
+    print(table)
+    skip_lines(1)
+
+    music_player(raw_notes, "Markov Chains 2")
