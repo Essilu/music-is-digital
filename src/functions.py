@@ -52,18 +52,21 @@ def transpose_notes(note_list, amount):
 
 def inverse_notes(note_list):
     """ Inverse notes with (total - note_number) % total """
-    output = []
+    parsed_output, raw_output = [], []
     for note in note_list:
         if note.is_pause:
-            output.append(note)
+            raw_output.append(f'{note.name}{note.figure}')
+            parsed_output.append(note)
         else:
             note_name_index = NOTE_NAMES.index(note.name)
             inverted_index = ((len(NOTE_NAMES) - note_name_index) % len(NOTE_NAMES))
             new_note_name = NOTE_NAMES[inverted_index]
             new_note = f'{new_note_name}{note.figure}'
-            output.append(Note(new_note))
+            new_note += 'p' if note.has_point else ''
+            raw_output.append(new_note)
+            parsed_output.append(Note(new_note))
 
-    return output
+    return parsed_output, raw_output
 
 
 def get_probability_matrix(note_list):
