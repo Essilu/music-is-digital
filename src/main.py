@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+# Program's entry point. It contains the main logic to ask the user what to do.
+
 from classes import Note
 from functions import *
 from prettytable import PrettyTable

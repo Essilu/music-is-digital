@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# Contains all the function used in the program, such as util functions,
+# functions to ask the user for inputs, or the mathematical functions used
+# for the various algorithms.
+
 import turtle as tr
 import copy
 import random
