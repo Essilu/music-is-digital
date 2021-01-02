@@ -56,7 +56,7 @@ elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     print("Choose the amount of notes to generate.")
 
     amount = choose_number(100)
-    skip_lines(1)
+    skip_lines(30)
 
     parsed_notes = choose_partition()
     skip_lines(30)
@@ -73,7 +73,7 @@ elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     print(table)
     skip_lines(1)
 
-    music_player(raw_notes, "Markov Chains 1")
+    music_player(raw_notes, "Markov Chains 1", False)
 
 elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
     print("You choosed to generate a song with the Markov's algorithm, by into account the number of occurences.")
@@ -85,6 +85,7 @@ elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
 
     print("Choose the amount of notes to generate.")
     amount = choose_number(100)
+    skip_lines(30)
     if source in ["DATABASE", "1"]:
         raw_notes, dataset = markov_v2(amount, run_from_database=True)
 
@@ -104,4 +105,4 @@ elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
     print(table)
     skip_lines(1)
 
-    music_player(raw_notes, "Markov Chains 2")
+    music_player(raw_notes, "Markov Chains 2", False)
