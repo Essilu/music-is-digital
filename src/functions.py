@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# Contains all the function used in the program, such as util functions,
+# functions to ask the user for inputs, or the mathematical functions used
+# for the various algorithms.
+
 import turtle as tr
 import copy
 import random
@@ -90,12 +96,13 @@ def save_to_file(content, song_name):
     file.close()
 
 
-def music_player(raw_array_to_play, method):
+def music_player(raw_array_to_play, method, skip_lines_at_start = True):
     """ Little menu to play/save/quit when a song has been chosen/created """
     parsed_array_to_play = [Note(note) for note in raw_array_to_play]
     as_string = ' '.join(raw_array_to_play)
 
-    skip_lines(30)
+    if skip_lines_at_start:
+        skip_lines(30)
 
     print(f"Here is your {method} partition:")
     print(as_string)

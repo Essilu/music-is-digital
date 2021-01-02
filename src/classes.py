@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+# Contains the "Note" class used in our program, that represent a note
+# and keeps various attributes assigned to it. It also contains static
+# methods to get a random note, or convert a whole list.
+
 import random
 import re
 from time import sleep
