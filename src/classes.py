@@ -44,10 +44,10 @@ class Note:
         return Note(raw_note)
 
     @staticmethod
-    def to_raw(parsed_note):
+    def to_raw(parsed_notes):
         """ Transform a list of Note instances into a list of raw notes, as in the partition files """
         output = []
-        for note in parsed_note:
+        for note in parsed_notes:
             new_note = f'{note.name}{note.figure}'
             new_note += 'p' if note.has_point else ''
             output.append(new_note)
@@ -63,32 +63,32 @@ class Note:
 
     def get_frequency(self):
         """ Assign a frequency for each available notes """
-        if self.parsed_data[0] == "DO":
+        if self.name == "DO":
             return 264
-        elif self.parsed_data[0] == "RE":
+        elif self.name == "RE":
             return 297
-        elif self.parsed_data[0] == "MI":
+        elif self.name == "MI":
             return 330
-        elif self.parsed_data[0] == "FA":
+        elif self.name == "FA":
             return 352
-        elif self.parsed_data[0] == "SOL":
+        elif self.name == "SOL":
             return 396
-        elif self.parsed_data[0] == "LA":
+        elif self.name == "LA":
             return 440
-        elif self.parsed_data[0] == "SI":
+        elif self.name == "SI":
             return 495
         return 0
 
     def get_duration(self):
         """ Get the duration depending on the figure, and if there is a point """
         duration = 0
-        if self.parsed_data[1] == 'r':  # "Ronde"
+        if self.figure == 'r':  # "Ronde"
             duration = 1000
-        elif self.parsed_data[1] == 'b':  # "Blanche"
+        elif self.figure == 'b':  # "Blanche"
             duration = 500
-        elif self.parsed_data[1] == 'n':  # "Noire"
+        elif self.figure == 'n':  # "Noire"
             duration = 250
-        elif self.parsed_data[1] == 'c':  # "Croche"
+        elif self.figure == 'c':  # "Croche"
             duration = 125
         # If there is a point, set it to half the duration, otherwise 0
         point_duration = duration / 2 if self.has_point else 0
