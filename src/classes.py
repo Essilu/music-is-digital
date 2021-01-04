@@ -82,7 +82,7 @@ class Note:
     def get_duration(self):
         """ Get the duration depending on the figure, and if there is a point """
         duration = 0
-        if self.figure == 'r':  # "Ronde"
+        if self.figure == 'r':    # "Ronde"
             duration = 1000
         elif self.figure == 'b':  # "Blanche"
             duration = 500
@@ -111,8 +111,8 @@ class Note:
             # Convert to 32−bit data
             tone = tone.astype(np.int32)
 
-            # Convert from 32−bit to 24−bit by building a new byte buffer ,
-            # Skipping every fourth bit
+            # Convert from 32−bit to 24−bit by building a new byte buffer,
+            # skipping every fourth bit
             # Note: this also works for 2−channel audio
             i = 0
             byte_array = []
