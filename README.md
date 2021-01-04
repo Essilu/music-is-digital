@@ -1,11 +1,26 @@
 # Music is digital
 
-> Python Project L1 Semester 1 (2020-2021) at EFREI-Paris
-> From Ulysse Juget and Elliot Maisl
+> Python Project L1 Semester 1 (2020-2021) at EFREI Paris
+> By Ulysse Juget and Elliot Maisl
+
+## Usage
+
+Once you have this folder on you computer, you can run the following command in a command-prompt, to install the needed dependencies:
+```
+$ pip install turtle numpy simpleaudio prettytable
+```
+
+Then you can run the program with:
+```
+$ python3 ./src/main.py
+```
+Make sure to run it with python 3. We were using python 3.8.5 during development.
+
 
 ## Instructions
 
-A summary of the instructions are available here : https://gist.github.com/noftaly/7db36b802dd0e628174df626d2cb47c6
+A summary of the instructions are available here: https://gist.github.com/noftaly/7db36b802dd0e628174df626d2cb47c6
+
 
 ## To Do
 
@@ -32,12 +47,14 @@ A summary of the instructions are available here : https://gist.github.com/nofta
 
 - [x] Main
   - [x] Music selector
-  - [x] Add test for every function so that we can test them
-
-- [x] GUI
-  - [x] Show musics (turtle, pygame, tkinter)
+  - [x] Show musics (turtle / pygame / tkinter)
 
 - [ ] Extra Bonus
-  - [ ] Add a music player when playing a music
+  - [ ] Make a GUI to select our musics and options, instead of the CLI
   - [ ] In Markov chains, generate figures with patterns, instead of randomly
   - [ ] Add unit tests to our functions
+  - [ ] Use typings to improve our code's quality
+
+## License
+
+© 2020 - 2021. This project is licensed under the [MIT License](./LICENSE).
