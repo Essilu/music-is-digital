@@ -20,7 +20,7 @@ algorithm = selector([
     "Markov chains 2 (Taking into account the number of occurrences of notes)"
 ], ["PLAY", "INVERSE", "TRANSPOSE", "MARKOV CHAINS 1", "MARKOV CHAINS 2"])
 
-skip_lines(30)
+skip_lines(-1)
 
 if algorithm == "PLAY" or algorithm == "1":
     print("Choose a file to play the music from.")
@@ -56,10 +56,10 @@ elif algorithm == "MARKOV CHAINS 1" or algorithm == "4":
     print("Choose the amount of notes to generate.")
 
     amount = choose_number(100)
-    skip_lines(30)
+    skip_lines(-1)
 
     parsed_notes = choose_partition()
-    skip_lines(30)
+    skip_lines(-1)
     raw_notes, dataset = markov_v1(amount, parsed_notes)
 
     # Create a table with an external library
@@ -81,17 +81,17 @@ elif algorithm == "MARKOV CHAINS 2" or algorithm == "5":
     skip_lines(1)
     source = selector(["Whole partition database", "A specific partition"], ["DATABASE", "PARTITION", "SPECIFIC"])
 
-    skip_lines(30)
+    skip_lines(-1)
 
     print("Choose the amount of notes to generate.")
     amount = choose_number(100)
-    skip_lines(30)
+    skip_lines(-1)
     if source in ["DATABASE", "1"]:
         raw_notes, dataset = markov_v2(amount, run_from_database=True)
 
     elif source in ["PARTITION", "SPECIFIC", "2"]:
         parsed_notes = choose_partition()
-        skip_lines(30)
+        skip_lines(-1)
         raw_notes, dataset = markov_v2(amount, parsed_note_list=parsed_notes)
 
     # Create a table with an external library
