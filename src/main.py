@@ -2,9 +2,20 @@
 
 # Program's entry point. It contains the main logic to ask the user what to do.
 
+import signal
+import sys
+
 from classes import Note
 from functions import *
 from prettytable import PrettyTable
+
+
+def signal_handler(_, __):
+    """ Handle CTRL + C (force-exit the program) gracefully """
+    print("\nEnd of program.")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 
 print("Welcome to the project 'Music is Digital', made by Elliot Maisl and Ulysse Juget.")
