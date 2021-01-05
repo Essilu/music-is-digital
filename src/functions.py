@@ -280,7 +280,7 @@ def merge_n_dictionnaries(dicts):
 
 
 def analyze_db():
-    """ Runs a statistical analysis of the """
+    """ Runs a statistical analysis of the database """
     file = open("./assets/partitions.txt", "r")
     lines = file.readlines()
     file.close()
