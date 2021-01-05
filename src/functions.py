@@ -5,6 +5,7 @@
 # for the various algorithms.
 
 import turtle as tr
+import os
 import copy
 import random
 from classes import Note
@@ -15,7 +16,11 @@ NOTE_FIGURES = ['r', 'b', 'n', 'c']
 
 
 def skip_lines(nb):
-    print("\n" * (nb-1))
+    """ Skip n lines based on the given number. If it is negative, it clears the console. """
+    if nb == -1:
+        os.system('cls' if os.name=='nt' else 'clear')
+    else:
+        print("\n" * (nb-1))
 
 
 def selector(possibilities, names):
@@ -62,7 +67,7 @@ def choose_partition():
     elif file_name == "2" or file_name == "HOMEMADE":
         file = open("./assets/homemade_partitions.txt", "r")
 
-    skip_lines(30)
+    skip_lines(-1)
 
     # Print all song's names in the partitions
     lines = file.readlines()
@@ -102,7 +107,7 @@ def music_player(raw_array_to_play, method, skip_lines_at_start = True):
     as_string = ' '.join(raw_array_to_play)
 
     if skip_lines_at_start:
-        skip_lines(30)
+        skip_lines(-1)
 
     print(f"Here is your {method} partition:")
     print(as_string)
@@ -113,7 +118,7 @@ def music_player(raw_array_to_play, method, skip_lines_at_start = True):
         # Ask the user if they want to Play the song, Save it, or quit the program
         option = selector(["Play", "Save", "Quit"], ["PLAY", "SAVE", "QUIT"])
         if option == "PLAY" or option == "1":
-            skip_lines(30)
+            skip_lines(-1)
             print("Playing...")
 
             tr.bgcolor("black")
@@ -138,7 +143,7 @@ def music_player(raw_array_to_play, method, skip_lines_at_start = True):
             skip_lines(1)
 
         elif option == "SAVE" or option == "2":
-            skip_lines(30)
+            skip_lines(-1)
             print(f"Here is your {method} partition:")
             print(as_string)
             skip_lines(1)
@@ -147,7 +152,7 @@ def music_player(raw_array_to_play, method, skip_lines_at_start = True):
             print("Partition saved as", song_name, "in homemade_partitions.txt")
 
         elif option == "QUIT" or option == "3":
-            skip_lines(30)
+            skip_lines(-1)
             print("End of program")
             break
 
@@ -275,7 +280,7 @@ def merge_n_dictionnaries(dicts):
 
 
 def analyze_db():
-    """ Runs a statistical analysis of the """
+    """ Runs a statistical analysis of the database """
     file = open("./assets/partitions.txt", "r")
     lines = file.readlines()
     file.close()
