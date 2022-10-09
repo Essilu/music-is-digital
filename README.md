@@ -1,7 +1,7 @@
 # Music is digital
 
 > Python Project L1 Semester 1 (2020-2021) at EFREI Paris
-> By Ulysse Juget and Elliot Maisl
+> By Ulysse  and Elliot 
 
 ## Usage
 
